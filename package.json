@@ -1,0 +1,192 @@
+{
+  "name": "svn-commit-ai-check",
+  "displayName": "SVN Commit AI Check",
+  "description": "AI-powered code review for SVN commits with support for C++ and Go",
+  "version": "0.1.0",
+  "publisher": "your-publisher-name",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "svn",
+    "ai",
+    "code review",
+    "commit",
+    "cpp",
+    "go",
+    "cursor"
+  ],
+  "extensionDependencies": [
+    "johnstoncode.svn-scm"
+  ],
+  "extensionPack": [],
+  "activationEvents": [
+    "onCommand:svn.commit",
+    "onView:svn",
+    "workspaceContains:**/.svn"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "svn-commit-ai-check.analyzeChanges",
+        "title": "SVN: Analyze Changes with AI",
+        "icon": "$(search)"
+      },
+      {
+        "command": "svn-commit-ai-check.configure",
+        "title": "SVN: Configure AI Check",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "svn-commit-ai-check.commitWithCheck",
+        "title": "SVN: Commit with AI Check",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "svn-commit-ai-check.quickCommit",
+        "title": "SVN: Quick Commit (Skip AI Check)",
+        "icon": "$(check)"
+      },
+      {
+        "command": "svn-commit-ai-check.checkDependencies",
+        "title": "SVN AI: Check Dependencies"
+      },
+      {
+        "command": "svn-commit-ai-check.installDependencies",
+        "title": "SVN AI: Install Missing Dependencies"
+      }
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "svn-commit-ai-check.commitWithCheck",
+          "group": "navigation@1",
+          "when": "scmProvider == svn && config.svn-commit-ai-check.enabled"
+        },
+        {
+          "command": "svn-commit-ai-check.analyzeChanges",
+          "group": "navigation@2",
+          "when": "scmProvider == svn && config.svn-commit-ai-check.enabled"
+        }
+      ],
+      "scm/resourceState/context": [
+        {
+          "command": "svn-commit-ai-check.commitWithCheck",
+          "group": "1_commit@1",
+          "when": "scmProvider == svn && config.svn-commit-ai-check.enabled"
+        }
+      ],
+      "scm/resourceGroup/context": [
+        {
+          "command": "svn-commit-ai-check.commitWithCheck",
+          "group": "1_commit@1",
+          "when": "scmProvider == svn && config.svn-commit-ai-check.enabled"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "svn-commit-ai-check.commitWithCheck",
+          "when": "config.svn-commit-ai-check.enabled"
+        },
+        {
+          "command": "svn-commit-ai-check.quickCommit",
+          "when": "config.svn-commit-ai-check.enabled"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "SVN Commit AI Check",
+      "properties": {
+        "svn-commit-ai-check.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable SVN commit AI checking"
+        },
+        "svn-commit-ai-check.interceptCommit": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "When enabled, shows AI check prompt before SVN commits. The 'Commit with AI Check' button will appear in the SCM panel."
+        },
+        "svn-commit-ai-check.autoCheck": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically run AI check on every commit without asking (skip the initial prompt)"
+        },
+        "svn-commit-ai-check.aiProvider": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "cursor",
+            "deepseek",
+            "claude",
+            "openai"
+          ],
+          "default": "auto",
+          "markdownDescription": "AI service provider\n- `auto`: Auto-detect (prefer Cursor)\n- `cursor`: Force use Cursor built-in AI\n- `deepseek`: DeepSeek API (recommended, cheap)\n- `claude`: Anthropic Claude\n- `openai`: OpenAI GPT-4"
+        },
+        "svn-commit-ai-check.deepseek.apiKey": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "DeepSeek API Key. Get one at [platform.deepseek.com](https://platform.deepseek.com/api_keys)"
+        },
+        "svn-commit-ai-check.claude.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Anthropic Claude API Key"
+        },
+        "svn-commit-ai-check.openai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "OpenAI API Key"
+        },
+        "svn-commit-ai-check.analysis.languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "cpp",
+            "c",
+            "go",
+            "h",
+            "hpp",
+            "cc",
+            "cxx"
+          ],
+          "description": "File extensions to analyze"
+        },
+        "svn-commit-ai-check.analysis.maxFileSize": {
+          "type": "number",
+          "default": 102400,
+          "description": "Maximum file size to analyze (bytes)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.x",
+    "@typescript-eslint/parser": "^6.x",
+    "@vscode/test-electron": "^2.3.x",
+    "eslint": "^8.x",
+    "typescript": "^5.3.x"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}
