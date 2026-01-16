@@ -4,6 +4,10 @@
   "description": "AI-powered code review for SVN commits with support for C++ and Go",
   "version": "0.1.0",
   "publisher": "your-publisher-name",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danahuang/AiCheckBeforeSvnCommit"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },

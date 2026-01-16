@@ -72,8 +72,8 @@ A Cursor-style configuration panel for selecting AI providers:
 
 ### Build from Source
 ```bash
-git clone https://github.com/your-repo/svn-commit-ai-check.git
-cd svn-commit-ai-check
+git clone https://github.com/danahuang/AiCheckBeforeSvnCommit.git
+cd AiCheckBeforeSvnCommit
 npm install
 npm run compile
 ```

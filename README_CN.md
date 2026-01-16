@@ -72,8 +72,8 @@
 
 ### 从源码构建
 ```bash
-git clone https://github.com/your-repo/svn-commit-ai-check.git
-cd svn-commit-ai-check
+git clone https://github.com/danahuang/AiCheckBeforeSvnCommit.git
+cd AiCheckBeforeSvnCommit
 npm install
 npm run compile
 ```
